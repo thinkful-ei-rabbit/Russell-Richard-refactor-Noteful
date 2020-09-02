@@ -16,8 +16,28 @@ class App extends Component {
     };
 
     componentDidMount() {
+        Promise.all([
+            fetch('http://localhost:9090/folders'),
+            fetch('http://localhost:909/notes'),
+        ])
+        .then(([notesRes, foldersRes]) => {
+           /*  if (!notesRes.ok || !foldersRes.ok) {
+               Promise.reject(notesRes.statusText) 
+            } else { */
+            return Promise.all([notesRes.json(), foldersRes.json()])
+            //}
+        })
+        .then((data) => {
+            console.log(data)
+        })
+        .catch((error) => {
+            console.log(`${error}`)
+            
+        })
+       
+
         // fake date loading from API call
-        setTimeout(() => this.setState(dummyStore), 600);
+        //setTimeout(() => this.setState(dummyStore), 600);
     }
 
     renderNavRoutes() {
