@@ -5,9 +5,9 @@ import NoteListNav from '../NoteListNav/NoteListNav';
 import NotePageNav from '../NotePageNav/NotePageNav';
 import NoteListMain from '../NoteListMain/NoteListMain';
 import NotePageMain from '../NotePageMain/NotePageMain';
-import dummyStore from '../dummy-store';
 import {getNotesForFolder, findNote, findFolder} from '../notes-helpers';
 import './App.css';
+import Context from '../Context/Context';
 
 class App extends Component {
     state = {
@@ -18,17 +18,17 @@ class App extends Component {
     componentDidMount() {
         Promise.all([
             fetch('http://localhost:9090/folders'),
-            fetch('http://localhost:909/notes'),
+            fetch('http://localhost:9090/notes'),
         ])
-        .then(([notesRes, foldersRes]) => {
+        .then(([foldersRes, notesRes]) => {
            /*  if (!notesRes.ok || !foldersRes.ok) {
                Promise.reject(notesRes.statusText) 
             } else { */
-            return Promise.all([notesRes.json(), foldersRes.json()])
+            return Promise.all([foldersRes.json(), notesRes.json()])
             //}
         })
-        .then((data) => {
-            console.log(data)
+        .then(([folders, notes]) => {
+            this.setState({folders, notes});
         })
         .catch((error) => {
             console.log(`${error}`)
@@ -110,7 +110,15 @@ class App extends Component {
     }
 
     render() {
+        const contextValue =   { 
+        notes: this.state.notes,
+        folders: this.state.folders,
+        deleteNote: () => {},
+        addNote: () => {},
+        addFolder: () => {},
+        }
         return (
+            <Context.Provider value={contextValue}>
             <div className="App">
                 <nav className="App__nav">{this.renderNavRoutes()}</nav>
                 <header className="App__header">
@@ -121,6 +129,7 @@ class App extends Component {
                 </header>
                 <main className="App__main">{this.renderMainRoutes()}</main>
             </div>
+            </Context.Provider>
         );
     }
 }

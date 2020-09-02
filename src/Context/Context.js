@@ -8,4 +8,4 @@ const Context = React.createContext({
   addFolder: () => {},
 })
 
-export default Context
+export default Context;
