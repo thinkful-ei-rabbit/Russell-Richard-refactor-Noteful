@@ -8,7 +8,7 @@ import Context from '../Context/Context'
 import {getNotesForFolder,} from '../notes-helpers';
 
 export default class NoteListMain extends React.Component {
-  static contextType = Context
+  static contextType = Context;
 
   render() {
     const { notes=[] } = this.context
@@ -26,7 +26,7 @@ export default class NoteListMain extends React.Component {
               id={note.id}
               name={note.name}
               modified={note.modified}
-            />
+            /> 
           </li>
         )}
       </ul>
